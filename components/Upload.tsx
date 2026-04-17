@@ -1,7 +1,11 @@
 import { CheckCircle2, ImageIcon, UploadIcon } from "lucide-react";
 import { useState } from "react";
 import { useOutletContext } from "react-router";
-import { REDIRECT_DELAY_MS, PROGRESS_INTERVAL_MS, PROGRESS_STEP } from "../lib/contasts";
+import {
+  REDIRECT_DELAY_MS,
+  PROGRESS_INTERVAL_MS,
+  PROGRESS_STEP,
+} from "../lib/contasts";
 
 interface AuthContextType {
   isSignedIn: boolean;
@@ -25,18 +29,24 @@ const Upload = ({ onComplete }: UploadProps) => {
     setProgress(0);
 
     const reader = new FileReader();
-    
+
+    reader.onerror = () => {
+      console.error("Error reading file");
+      setFile(null);
+      setProgress(0);
+    };
+
     reader.onload = (e) => {
       const base64String = e.target?.result as string;
-      
+
       let currentProgress = 0;
       const interval = setInterval(() => {
         currentProgress += PROGRESS_STEP;
-        
+
         if (currentProgress >= 100) {
           setProgress(100);
           clearInterval(interval);
-          
+
           setTimeout(() => {
             onComplete?.(base64String);
           }, REDIRECT_DELAY_MS);
@@ -45,13 +55,13 @@ const Upload = ({ onComplete }: UploadProps) => {
         }
       }, PROGRESS_INTERVAL_MS);
     };
-    
+
     reader.readAsDataURL(selectedFile);
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isSignedIn) return;
-    
+
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
       processFile(selectedFile);
@@ -72,11 +82,17 @@ const Upload = ({ onComplete }: UploadProps) => {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
-    
+
     if (!isSignedIn) return;
-    
+
     const droppedFile = e.dataTransfer.files?.[0];
-    if (droppedFile && (droppedFile.type === 'image/jpeg' || droppedFile.type === 'image/png' || droppedFile.name.match(/\.(jpg|jpeg|png)$/i))) {
+    const allowedTypes = ["image/jpeg", "image/png"];
+
+    if (
+      droppedFile &&
+      allowedTypes.includes(droppedFile.type) &&
+      droppedFile.size <= 50 * 1024 * 1024
+    ) {
       processFile(droppedFile);
     }
   };
@@ -84,7 +100,7 @@ const Upload = ({ onComplete }: UploadProps) => {
   return (
     <div className="upload">
       {!file ? (
-        <div 
+        <div
           className={`dropzone ${isDragging ? "is-dragging" : ""}`}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
