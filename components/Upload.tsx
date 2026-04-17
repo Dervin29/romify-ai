@@ -5,6 +5,8 @@ import {
   REDIRECT_DELAY_MS,
   PROGRESS_INTERVAL_MS,
   PROGRESS_STEP,
+  ALLOWED_UPLOAD_TYPES,
+  MAX_UPLOAD_SIZE_BYTES,
 } from "../lib/contasts";
 
 interface AuthContextType {
@@ -22,8 +24,24 @@ const Upload = ({ onComplete }: UploadProps) => {
 
   const { isSignedIn } = useOutletContext<AuthContextType>();
 
+  const validateFile = (file: File): boolean => {
+    if (!ALLOWED_UPLOAD_TYPES.includes(file.type)) {
+      console.error("Invalid file type");
+      return false;
+    }
+
+    if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+      console.error("File too large");
+      return false;
+    }
+
+    return true;
+  };
+
   const processFile = (selectedFile: File) => {
     if (!isSignedIn) return;
+
+    if (!validateFile(selectedFile)) return;
 
     setFile(selectedFile);
     setProgress(0);
@@ -86,15 +104,13 @@ const Upload = ({ onComplete }: UploadProps) => {
     if (!isSignedIn) return;
 
     const droppedFile = e.dataTransfer.files?.[0];
-    const allowedTypes = ["image/jpeg", "image/png"];
-
-    if (
-      droppedFile &&
-      allowedTypes.includes(droppedFile.type) &&
-      droppedFile.size <= 50 * 1024 * 1024
-    ) {
+    if (droppedFile) {
       processFile(droppedFile);
     }
+  };
+
+  const formatBytesToMB = (bytes: number) => {
+    return `${bytes / (1024 * 1024)}MB`;
   };
 
   return (
@@ -123,7 +139,9 @@ const Upload = ({ onComplete }: UploadProps) => {
                 ? "Drag & drop your floor plan here, or click to select a file"
                 : "Please sign in to upload your floor plan"}
             </p>
-            <p className="help">Max file size is 50MB</p>
+            <p className="help">
+              Max file size is {formatBytesToMB(MAX_UPLOAD_SIZE_BYTES)}
+            </p>
           </div>
         </div>
       ) : (
