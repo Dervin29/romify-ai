@@ -30,7 +30,6 @@ export const ALLOWED_UPLOAD_TYPES = [
   "image/png",
   "image/jpeg",
   "image/jpg",
-  "application/pdf",
 ];
 
 export const ROOMIFY_RENDER_PROMPT = `
