@@ -3,7 +3,7 @@ import Button from "./ui/Button";
 import { useOutletContext } from "react-router";
 const Navbar = () => {
   const { isSignedIn, username, signIn, signOut } =
-    useOutletContext<AuthContextType>();
+    useOutletContext<AuthContext>();
 
   // handling user authentication
   const handleAuthClick = async () => {
