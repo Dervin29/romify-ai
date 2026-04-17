@@ -133,7 +133,8 @@ export default function Home() {
                       <div className="meta">
                         <Clock size={12} />
                         <span>{new Date(timestamp).toLocaleDateString()}</span>
-                        <span>By {name}</span>
+                        {/* Consider displaying ownerId or fetching username */}
+                        <span>By You</span>
                       </div>
                     </div>
 
