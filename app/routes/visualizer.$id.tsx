@@ -243,50 +243,6 @@ const visualizerId = () => {
                 )}
               </div>
             )}
-
-            <div className="panel-compare">
-              <div className="panel-header">
-                <div className="panel-meta">
-                  <p>Comparison</p>
-                  <h3>Before and After</h3>
-                </div>
-                <div className="hint">Drag to compare</div>
-              </div>
-
-              <div className="compare-stage">
-                {project?.sourceImage && currentImage ? (
-                  <ReactCompareSlider
-                    defaultValue={50}
-                    style={{ width: "100%", height: "auto" }}
-                    itemOne={
-                      <ReactCompareSliderImage
-                        src={project.sourceImage}
-                        alt="Before image"
-                        className="compare-img"
-                      />
-                    }
-                    itemTwo={
-                      <ReactCompareSliderImage
-                        src={currentImage}
-                        alt="After image"
-                        className="compare-img"
-                      />
-                    }
-                  />
-                ) : (
-                  <div className="compare-fallback">
-                    {project?.sourceImage && (
-                      <img
-                        src={project.sourceImage}
-                        alt="Source View"
-                        className="compare-img"
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-
             {isProcessing && (
               <div className="render-overlay">
                 <div className="rendering-card">
@@ -294,6 +250,48 @@ const visualizerId = () => {
                   <span className="title">Rendering...</span>
                   <span className="subtitle">Generating Your 3D View</span>
                 </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="panel compare">
+          <div className="panel-header">
+            <div className="panel-meta">
+              <p>Comparison</p>
+              <h3>Before and After</h3>
+            </div>
+            <div className="hint">Drag to compare</div>
+          </div>
+
+          <div className="compare-stage">
+            {project?.sourceImage && currentImage ? (
+              <ReactCompareSlider
+                defaultValue={50}
+                style={{ width: "100%", height: "auto" }}
+                itemOne={
+                  <ReactCompareSliderImage
+                    src={project.sourceImage}
+                    alt="Before image"
+                    className="compare-img"
+                  />
+                }
+                itemTwo={
+                  <ReactCompareSliderImage
+                    src={currentImage}
+                    alt="After image"
+                    className="compare-img"
+                  />
+                }
+              />
+            ) : (
+              <div className="compare-fallback">
+                {project?.sourceImage && (
+                  <img
+                    src={project.sourceImage}
+                    alt="Source View"
+                    className="compare-img"
+                  />
+                )}
               </div>
             )}
           </div>
