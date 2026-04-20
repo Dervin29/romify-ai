@@ -4,8 +4,8 @@ import { ArrowRight, ArrowUpRight, Clock, Layers } from "lucide-react";
 import Button from "../../components/ui/Button";
 import Upload from "../../components/Upload";
 import { useNavigate } from "react-router";
-import React from "react";
-import { createProject } from "../../lib/puter.action";
+import React, { useEffect, useRef } from "react";
+import { createProject, getProjects } from "../../lib/puter.action";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -17,8 +17,13 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   const navigate = useNavigate();
   const [projects, setProjects] = React.useState<DesignItem[]>([]);
+  const isCreatingProjectRef = useRef(false);
 
   const handleUploadComplete = async (base64Data: string) => {
+    if (isCreatingProjectRef.current) return;
+
+    isCreatingProjectRef.current = true;
+
     const newId = Date.now().toString();
     const name = `Residence_${newId}`;
 
@@ -33,7 +38,7 @@ export default function Home() {
     try {
       const saved = await createProject({
         item: newItem,
-        visibility: 'private',
+        visibility: "private",
       });
 
       if (!saved) {
@@ -50,11 +55,25 @@ export default function Home() {
           name,
         },
       });
+
+      return true;
     } catch (err) {
       console.error("Failed to create project", err);
+      return false;
+    } finally {
+      // critical reset — without this you're locking the flow forever on failure
+      isCreatingProjectRef.current = false;
     }
   };
 
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const items = await getProjects();
+      setProjects(items);
+    };
+
+    fetchProjects();
+  }, []);
   return (
     <div className="home">
       <Navbar />
@@ -115,7 +134,11 @@ export default function Home() {
           <div className="projects-grid">
             {projects.map(
               ({ id, name, renderedImage, sourceImage, timestamp }) => (
-                <div key={id} className="project-card group">
+                <div
+                  key={id}
+                  className="project-card group"
+                  onClick={() => navigate(`/visualizer/${id}`)}
+                >
                   <div className="preview">
                     <img
                       src={renderedImage || sourceImage}
