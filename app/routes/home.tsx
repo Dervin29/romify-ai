@@ -3,7 +3,7 @@ import Navbar from "../../components/Navbar";
 import { ArrowRight, ArrowUpRight, Clock, Layers } from "lucide-react";
 import Button from "../../components/ui/Button";
 import Upload from "../../components/Upload";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 import React, { useEffect, useRef } from "react";
 import { createProject, getProjects } from "../../lib/puter.action";
 
@@ -61,7 +61,6 @@ export default function Home() {
       console.error("Failed to create project", err);
       return false;
     } finally {
-      // critical reset — without this you're locking the flow forever on failure
       isCreatingProjectRef.current = false;
     }
   };
@@ -74,6 +73,7 @@ export default function Home() {
 
     fetchProjects();
   }, []);
+
   return (
     <div className="home">
       <Navbar />
@@ -86,9 +86,11 @@ export default function Home() {
           </div>
           <p>Introducing Roomify 2.0</p>
         </div>
+
         <h1 className="header">
           Build Beautiful spaces at the speed of thought with Roomify
         </h1>
+
         <p className="subtitle">
           Roomify is an AI-first design environment that empowers you to
           visualize, render and ship architectural designs in record time.
@@ -115,13 +117,12 @@ export default function Home() {
               <p>Supports JPG, PNG formats up to 10MB</p>
             </div>
 
-            {/* Upload component */}
             <Upload onComplete={handleUploadComplete} />
           </div>
         </div>
       </section>
 
-      {/* Project Section  */}
+      {/* Project Section */}
       <section className="projects">
         <div className="section-inner">
           <div className="section-head">
@@ -134,15 +135,16 @@ export default function Home() {
           <div className="projects-grid">
             {projects.map(
               ({ id, name, renderedImage, sourceImage, timestamp }) => (
-                <div
+                <Link
                   key={id}
+                  to={`/visualizer/${id}`}
                   className="project-card group"
-                  onClick={() => navigate(`/visualizer/${id}`)}
+                  aria-label={`Open project ${name}`}
                 >
                   <div className="preview">
                     <img
                       src={renderedImage || sourceImage}
-                      alt="Project Preview"
+                      alt={`Preview of ${name}`}
                     />
                     <div className="badge">
                       <span>Community</span>
@@ -155,8 +157,9 @@ export default function Home() {
 
                       <div className="meta">
                         <Clock size={12} />
-                        <span>{new Date(timestamp).toLocaleDateString()}</span>
-                        {/* Consider displaying ownerId or fetching username */}
+                        <span>
+                          {new Date(timestamp).toLocaleDateString("en-GB")}
+                        </span>
                         <span>By You</span>
                       </div>
                     </div>
@@ -165,7 +168,7 @@ export default function Home() {
                       <ArrowUpRight size={16} />
                     </div>
                   </div>
-                </div>
+                </Link>
               ),
             )}
           </div>
