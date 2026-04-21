@@ -25,7 +25,7 @@ const ScrollToTop = () => {
   return (
     <button
       onClick={handleScrollTop}
-      className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-secondary text-white shadow-lg hover:scale-110 transition"
+      className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary text-white shadow-lg hover:scale-110 transition"
       aria-label="Scroll to top"
     >
       <ArrowUp size={18} />

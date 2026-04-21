@@ -99,11 +99,11 @@ export default function App() {
           }}
         />
         <footer
-          className="text-center py-6 text-sm border-t text-[var(--color-text-muted)] bg-surface"
+          className="text-center py-6 text-sm border-t text-[var(--color-muted)] bg-surface"
           style={{ borderColor: "var(--color-border)" }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p>© {new Date().getFullYear()} Roomify. All rights reserved.</p>
+            <p><span className="text-primary">© {new Date().getFullYear()} </span>Roomify. All rights reserved.</p>
           </div>
         </footer>
       </ThemeProvider>
