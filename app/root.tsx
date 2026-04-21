@@ -17,6 +17,7 @@ import {
   signOut as puterSignOut,
 } from "../lib/puter.action";
 import Navbar from "../components/Navbar";
+import ScrollToTop from "../components/ScrollToTop";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -112,6 +113,7 @@ export default function App() {
             </p>
           </div>
         </footer>
+        <ScrollToTop />
       </ThemeProvider>
     </main>
   );

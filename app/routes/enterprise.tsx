@@ -196,7 +196,6 @@ export default function Enterprise() {
 
             <div
               className="projects-grid"
-              style={{ gridTemplateColumns: "repeat(3, 1fr)" }}
             >
               {caseStudies.map((study, index) => (
                 <div key={index} className="project-card group">
