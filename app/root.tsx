@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { ThemeProvider } from "../context/ThemeContext";
 
 import type { Route } from "./+types/root";
 import "./app.css";
@@ -88,14 +89,24 @@ export default function App() {
 
   return (
     <main className=" min-h-screen bg-background text-background relative z-10">
-      <Outlet
-        context={{
-          ...authState,
-          refreshAuth,
-          signIn,
-          signOut,
-        }}
-      />
+      <ThemeProvider>
+        <Outlet
+          context={{
+            ...authState,
+            refreshAuth,
+            signIn,
+            signOut,
+          }}
+        />
+        <footer
+          className="text-center py-6 text-sm border-t text-[var(--color-text-muted)] bg-surface"
+          style={{ borderColor: "var(--color-border)" }}
+        >
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <p>© {new Date().getFullYear()} Roomify. All rights reserved.</p>
+          </div>
+        </footer>
+      </ThemeProvider>
     </main>
   );
 }

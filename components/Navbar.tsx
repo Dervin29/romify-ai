@@ -1,13 +1,15 @@
-import { Box } from "lucide-react";
+import { Box, Sun, Moon } from "lucide-react";
 import Button from "./ui/Button";
 import { useOutletContext } from "react-router";
+import { useTheme } from "../context/ThemeContext";
+
 const Navbar = () => {
   const { isSignedIn, username, signIn, signOut } =
     useOutletContext<AuthContext>();
+  const { theme, toggleTheme } = useTheme();
 
   // handling user authentication
   const handleAuthClick = async () => {
-    // If the user is currently signed in, we want to sign them out. Otherwise, we want to sign them in.
     if (isSignedIn) {
       try {
         await signOut();
@@ -17,7 +19,6 @@ const Navbar = () => {
       return;
     }
 
-    // If the user is not signed in, we want to sign them in.
     try {
       await signIn();
     } catch (error) {
@@ -41,6 +42,17 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="actions">
+          {/* Theme Toggle Button */}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={toggleTheme}
+            className="btn"
+            aria-label="Toggle theme"
+          >
+            {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
+          </Button>
+
           {isSignedIn ? (
             <>
               <span className="greeting">Hi, {username}</span>
@@ -64,7 +76,6 @@ const Navbar = () => {
                 Log in
               </Button>
               <a href="#upload" className="cta">
-                {" "}
                 Get Started
               </a>
             </>

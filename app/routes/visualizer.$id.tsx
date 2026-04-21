@@ -23,6 +23,7 @@ const visualizerId = () => {
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [project, setProject] = useState<DesignItem | null>(null);
   const [isProjectLoading, setIsProjectLoading] = useState(true);
+  const [isSlowProcessing, setIsSlowProcessing] = useState(false);
 
   const handleBack = () => {
     navigate("/");
@@ -109,6 +110,22 @@ const visualizerId = () => {
     hasInitialGenerated.current = true;
     void runGeneration(project);
   }, [project, isProjectLoading]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isProcessing) {
+      setIsSlowProcessing(false);
+
+      timer = setTimeout(() => {
+        setIsSlowProcessing(true);
+      }, 15000); // 15s threshold
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isProcessing]);
 
   const handleExport = () => {
     if (!currentImage) return;
@@ -243,57 +260,66 @@ const visualizerId = () => {
                 )}
               </div>
             )}
-
-            <div className="panel-compare">
-              <div className="panel-header">
-                <div className="panel-meta">
-                  <p>Comparison</p>
-                  <h3>Before and After</h3>
-                </div>
-                <div className="hint">Drag to compare</div>
-              </div>
-
-              <div className="compare-stage">
-                {project?.sourceImage && currentImage ? (
-                  <ReactCompareSlider
-                    defaultValue={50}
-                    style={{ width: "100%", height: "auto" }}
-                    itemOne={
-                      <ReactCompareSliderImage
-                        src={project.sourceImage}
-                        alt="Before image"
-                        className="compare-img"
-                      />
-                    }
-                    itemTwo={
-                      <ReactCompareSliderImage
-                        src={currentImage}
-                        alt="After image"
-                        className="compare-img"
-                      />
-                    }
-                  />
-                ) : (
-                  <div className="compare-fallback">
-                    {project?.sourceImage && (
-                      <img
-                        src={project.sourceImage}
-                        alt="Source View"
-                        className="compare-img"
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-
             {isProcessing && (
               <div className="render-overlay">
                 <div className="rendering-card">
                   <RefreshCcw className="spinner" />
-                  <span className="title">Rendering...</span>
-                  <span className="subtitle">Generating Your 3D View</span>
+                  {isSlowProcessing ? (
+                    <>
+                      <span className="title">Still working...</span>
+                      <span className="subtitle">
+                        Complex designs can take up to 30–60 seconds.
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="title">Rendering...</span>
+                      <span className="subtitle">Generating your 3D view</span>
+                    </>
+                  )}
                 </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="panel compare">
+          <div className="panel-header">
+            <div className="panel-meta">
+              <p>Comparison</p>
+              <h3>Before and After</h3>
+            </div>
+            <div className="hint">Drag to compare</div>
+          </div>
+
+          <div className="compare-stage">
+            {project?.sourceImage && currentImage ? (
+              <ReactCompareSlider
+                defaultValue={50}
+                style={{ width: "100%", height: "auto" }}
+                itemOne={
+                  <ReactCompareSliderImage
+                    src={project.sourceImage}
+                    alt="Before image"
+                    className="compare-img"
+                  />
+                }
+                itemTwo={
+                  <ReactCompareSliderImage
+                    src={currentImage}
+                    alt="After image"
+                    className="compare-img"
+                  />
+                }
+              />
+            ) : (
+              <div className="compare-fallback">
+                {project?.sourceImage && (
+                  <img
+                    src={project.sourceImage}
+                    alt="Source View"
+                    className="compare-img"
+                  />
+                )}
               </div>
             )}
           </div>
