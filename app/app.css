@@ -15,7 +15,7 @@
     --color-muted: #64748b;
 
     --font-serif: "Instrument Serif", serif;
-    --font-sans: Inter, sans-serif;
+    --font-sans: "Inter", sans-serif;
 
     --shadow-neobrutalism: 2px 2px 0px 0px rgba(15, 23, 42, 0.8);
 }
