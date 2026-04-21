@@ -4,10 +4,9 @@ export default [
   index("routes/home.tsx"),
   route("about", "routes/about.tsx"),
   route("visualizer/:id", "routes/visualizer.$id.tsx"),
-  
-  // Dynamic route for under-development pages
+
+  // keep this ONLY if you really need it
   route(":page", "routes/under-development.tsx"),
-  
-  // Catch-all for 404s (must be last)
+
   route("*", "routes/not-found.tsx"),
-] satisfies RouteConfig;
+];
