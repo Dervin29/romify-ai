@@ -5,8 +5,6 @@ import {
   ArrowUpRight,
   Clock,
   Layers,
-  Sun,
-  Moon,
 } from "lucide-react";
 import Button from "../../components/ui/Button";
 import Upload from "../../components/Upload";
@@ -17,8 +15,8 @@ import ScrollToTop from "../../components/ScrollToTop";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Roomify - AI Architectural Design Platform" },
+    { name: "description", content: "Build beautiful spaces at the speed of thought with Roomify AI" },
   ];
 }
 
@@ -70,7 +68,6 @@ export default function Home() {
       console.error("Failed to create project", err);
       return false;
     } finally {
-      // critical reset — without this you're locking the flow forever on failure
       isCreatingProjectRef.current = false;
     }
   };
@@ -95,7 +92,6 @@ export default function Home() {
     <div className="home">
       <Navbar />
 
-      {/* Hero Section */}
       <section className="hero">
         <div className="announce">
           <div className="dot">
@@ -103,9 +99,11 @@ export default function Home() {
           </div>
           <p>Introducing Roomify 2.0</p>
         </div>
-        <h1 className="header">
+        
+        <h1>
           Build Beautiful spaces at the speed of thought with Roomify
         </h1>
+        
         <p className="subtitle">
           Roomify is an AI-first design environment that empowers you to
           visualize, render and ship architectural designs in record time.
@@ -132,13 +130,11 @@ export default function Home() {
               <p>Supports JPG, PNG formats up to 10MB</p>
             </div>
 
-            {/* Upload component */}
             <Upload onComplete={handleUploadComplete} />
           </div>
         </div>
       </section>
 
-      {/* Project Section  */}
       <section className="projects">
         <div className="section-inner">
           <div className="section-head">
@@ -150,20 +146,21 @@ export default function Home() {
 
           <div className="projects-grid">
             {loading ? (
-              // skeleton loader
               Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="project-card skeleton">
-                  <div className="preview shimmer" />
+                <div key={i} className="project-card">
+                  <div className="preview" />
                   <div className="card-body">
-                    <div className="line shimmer" />
-                    <div className="line small shimmer" />
+                    <div>
+                      <div className="skeleton-line" />
+                      <div className="skeleton-line small" />
+                    </div>
                   </div>
                 </div>
               ))
             ) : projects.length === 0 ? (
-              <p className="empty-state">
+              <div className="empty">
                 No projects yet. Start by uploading one.
-              </p>
+              </div>
             ) : (
               projects.map(
                 ({ id, name, renderedImage, sourceImage, timestamp }) => (
@@ -175,7 +172,7 @@ export default function Home() {
                     <div className="preview">
                       <img
                         src={renderedImage || sourceImage}
-                        alt="Project Preview"
+                        alt={`${name} preview`}
                       />
                       <div className="badge">
                         <span>Community</span>
@@ -185,7 +182,6 @@ export default function Home() {
                     <div className="card-body">
                       <div>
                         <h3>{name}</h3>
-
                         <div className="meta">
                           <Clock size={12} />
                           <span>
@@ -196,7 +192,7 @@ export default function Home() {
                       </div>
 
                       <div className="arrow">
-                        <ArrowUpRight size={16} />
+                        <ArrowRight size={16} />
                       </div>
                     </div>
                   </div>
@@ -207,7 +203,7 @@ export default function Home() {
         </div>
       </section>
 
-      <ScrollToTop/>
+      <ScrollToTop />
     </div>
   );
 }

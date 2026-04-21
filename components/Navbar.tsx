@@ -1,14 +1,14 @@
 import { Box, Sun, Moon } from "lucide-react";
 import Button from "./ui/Button";
-import { useOutletContext } from "react-router";
+import { useOutletContext, useNavigate, Link } from "react-router";
 import { useTheme } from "../context/ThemeContext";
 
 const Navbar = () => {
   const { isSignedIn, username, signIn, signOut } =
     useOutletContext<AuthContext>();
   const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
 
-  // handling user authentication
   const handleAuthClick = async () => {
     if (isSignedIn) {
       try {
@@ -26,28 +26,37 @@ const Navbar = () => {
     }
   };
 
+  const navLinks = [
+    { path: "/", label: "Home" },
+    { path: "/about", label: "About" },
+    { path: "/products", label: "Products" },
+    { path: "/pricing", label: "Pricing" },
+    { path: "/community", label: "Community" },
+    { path: "/enterprise", label: "Enterprise" },
+  ];
+
   return (
     <header className="navbar">
       <nav className="inner">
         <div className="left">
-          <div className="brand">
+          <div className="brand" onClick={() => navigate("/")} style={{ cursor: "pointer" }}>
             <Box className="logo" />
             <span className="name">Roomify</span>
           </div>
           <ul className="links">
-            <a href="#">Products</a>
-            <a href="#">Pricing</a>
-            <a href="#">Community</a>
-            <a href="#">Enterprise</a>
+            {navLinks.map((link) => (
+              <Link key={link.path} to={link.path}>
+                {link.label}
+              </Link>
+            ))}
           </ul>
         </div>
         <div className="actions">
-          {/* Theme Toggle Button */}
           <Button
             variant="outline"
             size="sm"
             onClick={toggleTheme}
-            className="btn"
+            className="btn theme-toggle"
             aria-label="Toggle theme"
           >
             {theme === "light" ? <Moon size={16} /> : <Sun size={16} />}
@@ -66,19 +75,14 @@ const Navbar = () => {
               </Button>
             </>
           ) : (
-            <>
-              <Button
-                variant="outline"
-                size="sm"
-                className="btn"
-                onClick={handleAuthClick}
-              >
-                Log in
-              </Button>
-              <a href="#upload" className="cta">
-                Get Started
-              </a>
-            </>
+            <Button
+              variant="outline"
+              size="sm"
+              className="btn"
+              onClick={handleAuthClick}
+            >
+              Log in
+            </Button>
           )}
         </div>
       </nav>
