@@ -1,11 +1,19 @@
 import type { Route } from "./+types/home";
 import Navbar from "../../components/Navbar";
-import { ArrowRight, ArrowUpRight, Clock, Layers } from "lucide-react";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Clock,
+  Layers,
+  Sun,
+  Moon,
+} from "lucide-react";
 import Button from "../../components/ui/Button";
 import Upload from "../../components/Upload";
 import { useNavigate } from "react-router";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createProject, getProjects } from "../../lib/puter.action";
+import ScrollToTop from "../../components/ScrollToTop";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -17,6 +25,7 @@ export function meta({}: Route.MetaArgs) {
 export default function Home() {
   const navigate = useNavigate();
   const [projects, setProjects] = React.useState<DesignItem[]>([]);
+  const [loading, setLoading] = React.useState(true);
   const isCreatingProjectRef = useRef(false);
 
   const handleUploadComplete = async (base64Data: string) => {
@@ -68,12 +77,20 @@ export default function Home() {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      const items = await getProjects();
-      setProjects(items);
+      try {
+        setLoading(true);
+        const items = await getProjects();
+        setProjects(items || []);
+      } catch (err) {
+        console.error("Failed to fetch projects", err);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchProjects();
   }, []);
+
   return (
     <div className="home">
       <Navbar />
@@ -132,45 +149,65 @@ export default function Home() {
           </div>
 
           <div className="projects-grid">
-            {projects.map(
-              ({ id, name, renderedImage, sourceImage, timestamp }) => (
-                <div
-                  key={id}
-                  className="project-card group"
-                  onClick={() => navigate(`/visualizer/${id}`)}
-                >
-                  <div className="preview">
-                    <img
-                      src={renderedImage || sourceImage}
-                      alt="Project Preview"
-                    />
-                    <div className="badge">
-                      <span>Community</span>
-                    </div>
-                  </div>
-
+            {loading ? (
+              // skeleton loader
+              Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="project-card skeleton">
+                  <div className="preview shimmer" />
                   <div className="card-body">
-                    <div>
-                      <h3>{name}</h3>
-
-                      <div className="meta">
-                        <Clock size={12} />
-                        <span>{new Date(timestamp).toLocaleDateString()}</span>
-                        {/* Consider displaying ownerId or fetching username */}
-                        <span>By You</span>
+                    <div className="line shimmer" />
+                    <div className="line small shimmer" />
+                  </div>
+                </div>
+              ))
+            ) : projects.length === 0 ? (
+              <p className="empty-state">
+                No projects yet. Start by uploading one.
+              </p>
+            ) : (
+              projects.map(
+                ({ id, name, renderedImage, sourceImage, timestamp }) => (
+                  <div
+                    key={id}
+                    className="project-card group"
+                    onClick={() => navigate(`/visualizer/${id}`)}
+                  >
+                    <div className="preview">
+                      <img
+                        src={renderedImage || sourceImage}
+                        alt="Project Preview"
+                      />
+                      <div className="badge">
+                        <span>Community</span>
                       </div>
                     </div>
 
-                    <div className="arrow">
-                      <ArrowUpRight size={16} />
+                    <div className="card-body">
+                      <div>
+                        <h3>{name}</h3>
+
+                        <div className="meta">
+                          <Clock size={12} />
+                          <span>
+                            {new Date(timestamp).toLocaleDateString()}
+                          </span>
+                          <span>By You</span>
+                        </div>
+                      </div>
+
+                      <div className="arrow">
+                        <ArrowUpRight size={16} />
+                      </div>
                     </div>
                   </div>
-                </div>
-              ),
+                ),
+              )
             )}
           </div>
         </div>
       </section>
+
+      <ScrollToTop/>
     </div>
   );
 }

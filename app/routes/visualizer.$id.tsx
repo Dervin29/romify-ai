@@ -23,6 +23,7 @@ const visualizerId = () => {
   const [currentImage, setCurrentImage] = useState<string | null>(null);
   const [project, setProject] = useState<DesignItem | null>(null);
   const [isProjectLoading, setIsProjectLoading] = useState(true);
+  const [isSlowProcessing, setIsSlowProcessing] = useState(false);
 
   const handleBack = () => {
     navigate("/");
@@ -109,6 +110,22 @@ const visualizerId = () => {
     hasInitialGenerated.current = true;
     void runGeneration(project);
   }, [project, isProjectLoading]);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (isProcessing) {
+      setIsSlowProcessing(false);
+
+      timer = setTimeout(() => {
+        setIsSlowProcessing(true);
+      }, 15000); // 15s threshold
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isProcessing]);
 
   const handleExport = () => {
     if (!currentImage) return;
@@ -247,8 +264,19 @@ const visualizerId = () => {
               <div className="render-overlay">
                 <div className="rendering-card">
                   <RefreshCcw className="spinner" />
-                  <span className="title">Rendering...</span>
-                  <span className="subtitle">Generating Your 3D View</span>
+                  {isSlowProcessing ? (
+                    <>
+                      <span className="title">Still working...</span>
+                      <span className="subtitle">
+                        Complex designs can take up to 30–60 seconds.
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="title">Rendering...</span>
+                      <span className="subtitle">Generating your 3D view</span>
+                    </>
+                  )}
                 </div>
               </div>
             )}
