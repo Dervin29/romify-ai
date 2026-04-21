@@ -97,7 +97,6 @@ export default function Pricing() {
             <div
               className="grid sm:grid-cols-2 md:grid-cols-3 gap-8"
               style={{
-                gridTemplateColumns: "repeat(3, 1fr)",
                 alignItems: "stretch",
               }}
             >
