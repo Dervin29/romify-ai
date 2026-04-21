@@ -16,6 +16,7 @@ import {
   signIn as puterSignIn,
   signOut as puterSignOut,
 } from "../lib/puter.action";
+import Navbar from "../components/Navbar";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -103,7 +104,12 @@ export default function App() {
           style={{ borderColor: "var(--color-border)" }}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <p><span className="text-primary">© {new Date().getFullYear()} </span>Roomify. All rights reserved.</p>
+            <p>
+              <span className="text-primary">
+                © {new Date().getFullYear()}{" "}
+              </span>
+              Roomify. All rights reserved.
+            </p>
           </div>
         </footer>
       </ThemeProvider>
