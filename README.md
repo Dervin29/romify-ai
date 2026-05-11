@@ -1,87 +1,44 @@
-# Welcome to React Router!
+# Roomify AI
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Roomify AI is a modern room transformation platform that allows users to redesign and visualize interior spaces with different styles through an intuitive and responsive interface.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## Live Demo
 
-## Features
-
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
-
-## Getting Started
-
-### Installation
-
-Install the dependencies:
-
-```bash
-npm install
-```
-
-### Development
-
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+🌐 [Roomify AI](https://romify-ai.vercel.app/)
 
 ---
 
-Built with ❤️ using React Router.
+## Overview
+
+Roomify AI was built to provide users with a seamless experience for exploring room design transformations. The application focuses on clean UI design, responsive layouts, optimized image workflows, and smooth user interactions.
+
+The project demonstrates modern frontend development practices using Next.js and TypeScript while maintaining a scalable and maintainable architecture.
+
+---
+
+## Features
+
+- Modern and responsive user interface
+- Room image upload functionality
+- Multiple room style visualization support
+- Optimized image rendering workflows
+- Reusable component architecture
+- Fast and responsive user experience
+- Mobile-friendly design
+- Clean and maintainable codebase
+
+---
+
+## Tech Stack
+
+### Frontend
+- Next.js
+- React.js
+- TypeScript
+- Tailwind CSS
+- ShadCN UI
+
+### Deployment
+- Vercel
+
+---
